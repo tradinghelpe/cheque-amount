@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheque Amount – अक्षरी रक्कम</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700&family=Tiro+Devanagari+Hindi:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:   #1A2B5F;
+    --navy2:  #243573;
+    --gold:   #C9A43C;
+    --gold2:  #E8C060;
+    --cream:  #F7F4EE;
+    --paper:  #FFFDF7;
+    --ink:    #1A1A2E;
+    --muted:  #6B7280;
+    --green:  #1B7A50;
+    --red:    #C0392B;
+    --border: #D4C89A;
+    --radius: 14px;
+  }
+
+  body {
+    background: linear-gradient(160deg, #e8eaf6 0%, #f0ece0 100%);
+    min-height: 100vh;
+    font-family: 'Hind', sans-serif;
+    color: var(--ink);
+    padding: 16px 12px 40px;
+  }
+
+  /* ── Header ── */
+  .header {
+    text-align: center;
+    margin-bottom: 22px;
+  }
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--navy);
+    color: var(--gold2);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+  }
+  .header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.2;
+  }
+  .header h1 span {
+    color: var(--gold);
+  }
+  .header p {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  /* ── Input Card ── */
+  .card {
+    background: var(--paper);
+    border-radius: var(--radius);
+    border: 1.5px solid var(--border);
+    box-shadow: 0 4px 20px rgba(26,43,95,.09);
+    padding: 20px 18px;
+    margin-bottom: 16px;
+  }
+
+  .input-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--navy);
+    letter-spacing: .8px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .input-row {
+    display: flex;
+    align-items: center;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--cream);
+    transition: border-color .2s;
+  }
+  .input-row:focus-within {
+    border-color: var(--navy);
+    box-shadow: 0 0 0 3px rgba(26,43,95,.12);
+  }
+  .currency-symbol {
+    padding: 0 14px;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--navy);
+    background: transparent;
+    user-select: none;
+  }
+  #amountInput {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-family: 'Hind', sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--ink);
+    padding: 14px 4px 14px 0;
+    outline: none;
+    min-width: 0;
+  }
+  #amountInput::placeholder { color: #bbb; font-weight: 400; font-size: 18px; }
+
+  .clear-btn {
+    background: none;
+    border: none;
+    padding: 0 14px;
+    color: var(--muted);
+    font-size: 20px;
+    cursor: pointer;
+    line-height: 1;
+    transition: color .15s;
+  }
+  .clear-btn:active { color: var(--red); }
+
+  .hint {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 8px;
+    padding-left: 2px;
+  }
+
+  /* ── Result Cards ── */
+  .result-card {
+    background: var(--paper);
+    border-radius: var(--radius);
+    border: 1.5px solid var(--border);
+    box-shadow: 0 4px 20px rgba(26,43,95,.07);
+    margin-bottom: 14px;
+    overflow: hidden;
+  }
+
+  .result-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    border-bottom: 1px dashed var(--border);
+  }
+  .result-lang {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .lang-flag {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .lang-flag.mr { background: #fff3cd; color: var(--navy); border: 1.5px solid var(--gold); }
+  .lang-flag.en { background: #e8f4fd; color: var(--navy); border: 1.5px solid #7bafd4; }
+  .lang-name {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--navy);
+    letter-spacing: .6px;
+    text-transform: uppercase;
+  }
+
+  .copy-btn {
+    background: var(--cream);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 5px 11px;
+    font-family: 'Hind', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--navy);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: all .15s;
+    white-space: nowrap;
+  }
+  .copy-btn:active { background: var(--navy); color: #fff; }
+  .copy-btn.copied { background: var(--green); color: #fff; border-color: var(--green); }
+
+  .result-body {
+    padding: 14px 16px 16px;
+  }
+
+  .result-text {
+    font-family: 'Tiro Devanagari Hindi', serif;
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--ink);
+    min-height: 44px;
+    word-break: break-word;
+  }
+  .result-text.en {
+    font-family: 'Hind', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    font-style: italic;
+    font-weight: 500;
+  }
+  .result-text.empty {
+    color: #ccc;
+    font-style: italic;
+    font-family: 'Hind', sans-serif;
+    font-size: 14px;
+  }
+
+  /* cheque-style decorative lines */
+  .cheque-lines {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border);
+    display: flex;
+    gap: 4px;
+  }
+  .cheque-line { flex: 1; height: 1px; background: var(--border); }
+
+  /* ── Amount display ── */
+  .amount-display {
+    text-align: center;
+    padding: 10px 16px 16px;
+    display: none;
+  }
+  .amount-display.visible { display: block; }
+  .amount-num {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--navy);
+  }
+  .amount-num span { color: var(--gold); }
+
+  /* ── Error ── */
+  .error-msg {
+    color: var(--red);
+    font-size: 13px;
+    margin-top: 8px;
+    display: none;
+  }
+  .error-msg.visible { display: block; }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    font-size: 11.5px;
+    color: var(--muted);
+    margin-top: 8px;
+    line-height: 1.6;
+  }
+  .footer strong { color: var(--navy); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-badge">🏦 Banking Tool</div>
+  <h1>चेक <span>अक्षरी रक्कम</span></h1>
+  <p>Cheque Amount in Words · मराठी & English</p>
+</div>
+
+<!-- Input -->
+<div class="card">
+  <label class="input-label" for="amountInput">💰 रक्कम टाका (Enter Amount)</label>
+  <div class="input-row">
+    <span class="currency-symbol">₹</span>
+    <input type="number" id="amountInput" placeholder="0.00" min="0" max="9999999999.99" step="0.01" inputmode="decimal" />
+    <button class="clear-btn" onclick="clearInput()" title="Clear">✕</button>
+  </div>
+  <div class="error-msg" id="errorMsg">⚠ कृपया योग्य रक्कम टाका (Max: ₹9,99,99,99,999.99)</div>
+  <div id="formattedAmt" style="display:none; margin-top:10px; background:#f0f4ff; border:1.5px solid #c5d0f0; border-radius:8px; padding:9px 14px; text-align:center;">
+    <span style="font-size:12px; color:#6B7280; font-weight:600; letter-spacing:.6px; text-transform:uppercase;">रक्कम</span><br>
+    <span id="formattedAmtVal" style="font-size:22px; font-weight:700; color:#1A2B5F; letter-spacing:.5px;"></span>
+  </div>
+  <p class="hint">उदा. 12500, 75000.50, 1500000</p>
+</div>
+
+<!-- Marathi Result -->
+<div class="result-card">
+  <div class="result-header">
+    <div class="result-lang">
+      <div class="lang-flag mr">म</div>
+      <span class="lang-name">मराठी</span>
+    </div>
+    <button class="copy-btn" id="copyMr" onclick="copyText('mr')">
+      📋 कॉपी करा
+    </button>
+  </div>
+  <div class="result-body">
+    <div class="result-text" id="resultMr">
+      <span class="empty">इथे मराठीत रक्कम दिसेल…</span>
+    </div>
+    <div class="cheque-lines">
+      <div class="cheque-line"></div><div class="cheque-line"></div>
+      <div class="cheque-line"></div><div class="cheque-line"></div>
+    </div>
+  </div>
+</div>
+
+<!-- English Result -->
+<div class="result-card">
+  <div class="result-header">
+    <div class="result-lang">
+      <div class="lang-flag en">E</div>
+      <span class="lang-name">English</span>
+    </div>
+    <button class="copy-btn" id="copyEn" onclick="copyText('en')">
+      📋 Copy
+    </button>
+  </div>
+  <div class="result-body">
+    <div class="result-text en" id="resultEn">
+      <span class="empty">Amount in English will appear here…</span>
+    </div>
+    <div class="cheque-lines">
+      <div class="cheque-line"></div><div class="cheque-line"></div>
+      <div class="cheque-line"></div><div class="cheque-line"></div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <strong>Note:</strong> Indian number system (लाख / कोटी) वापरले आहे.<br>
+  Max ₹9,99,99,99,999.99 · Paise included
+</div>
+
+<script>
+/* ────────────────────────────────
+   MARATHI NUMBER WORDS
+──────────────────────────────── */
+const mr1to99 = [
+  '', 'एक', 'दोन', 'तीन', 'चार', 'पाच', 'सहा', 'सात', 'आठ', 'नऊ',
+  'दहा', 'अकरा', 'बारा', 'तेरा', 'चौदा', 'पंधरा', 'सोळा', 'सतरा', 'अठरा', 'एकोणीस',
+  'वीस', 'एकवीस', 'बावीस', 'तेवीस', 'चोवीस', 'पंचवीस', 'सव्वीस', 'सत्तावीस', 'अठ्ठावीस', 'एकोणतीस',
+  'तीस', 'एकतीस', 'बत्तीस', 'तेहेतीस', 'चौतीस', 'पस्तीस', 'छत्तीस', 'सदतीस', 'अडतीस', 'एकोणचाळीस',
+  'चाळीस', 'एकेचाळीस', 'बेचाळीस', 'त्रेचाळीस', 'चव्वेचाळीस', 'पंचेचाळीस', 'सेहेचाळीस', 'सत्तेचाळीस', 'अठ्ठेचाळीस', 'एकोणपन्नास',
+  'पन्नास', 'एकावन्न', 'बावन्न', 'त्रेपन्न', 'चोपन्न', 'पंचावन्न', 'छप्पन्न', 'सत्तावन्न', 'अठ्ठावन्न', 'एकोणसाठ',
+  'साठ', 'एकसष्ट', 'बासष्ट', 'त्रेसष्ट', 'चौसष्ट', 'पासष्ट', 'सहासष्ट', 'सदुसष्ट', 'अडुसष्ट', 'एकोणसत्तर',
+  'सत्तर', 'एकाहत्तर', 'बाहत्तर', 'त्र्याहत्तर', 'चौऱ्याहत्तर', 'पंच्याहत्तर', 'शहात्तर', 'सत्याहत्तर', 'अठ्ठ्याहत्तर', 'एकोणऐंशी',
+  'ऐंशी', 'एक्याऐंशी', 'ब्याऐंशी', 'त्र्याऐंशी', 'चौऱ्याऐंशी', 'पंच्याऐंशी', 'शहाऐंशी', 'सत्याऐंशी', 'अठ्ठ्याऐंशी', 'एकोणनव्वद',
+  'नव्वद', 'एक्याण्णव', 'ब्याण्णव', 'त्र्याण्णव', 'चौऱ्याण्णव', 'पंच्याण्णव', 'शहाण्णव', 'सत्याण्णव', 'अठ्ठ्याण्णव', 'नव्याण्णव'
+];
+
+function mrHundreds(n) {
+  if (n === 0) return '';
+  const h = Math.floor(n / 100);
+  const r = n % 100;
+  let res = '';
+  if (h > 0) res += mr1to99[h] + ' शे';
+  if (r > 0) res += (res ? ' ' : '') + mr1to99[r];
+  return res;
+}
+
+function numberToMarathi(amount) {
+  if (amount === 0) return 'शून्य रुपये';
+  
+  const rupees = Math.floor(amount);
+  const paisa  = Math.round((amount - rupees) * 100);
+
+  let words = '';
+  let rem = rupees;
+
+  const crore = Math.floor(rem / 10000000); rem %= 10000000;
+  const lakh  = Math.floor(rem / 100000);   rem %= 100000;
+  const thou  = Math.floor(rem / 1000);     rem %= 1000;
+  const hund  = rem;
+
+  if (crore > 0) words += mrHundreds(crore) + ' कोटी';
+  if (lakh  > 0) words += (words ? ' ' : '') + mrHundreds(lakh)  + ' लाख';
+  if (thou  > 0) words += (words ? ' ' : '') + mrHundreds(thou)  + ' हजार';
+  if (hund  > 0) words += (words ? ' ' : '') + mrHundreds(hund);
+
+  let result = words ? words + ' रुपये' : '';
+
+  if (paisa > 0) {
+    result += (result ? ' आणि ' : '') + mr1to99[paisa] + ' पैसे';
+  }
+
+  return result || 'शून्य रुपये';
+}
+
+/* ────────────────────────────────
+   ENGLISH NUMBER WORDS (Indian)
+──────────────────────────────── */
+const en1to19 = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine',
+  'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+const enTens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+
+function enHundreds(n) {
+  if (n === 0) return '';
+  if (n < 20) return en1to19[n];
+  if (n < 100) return enTens[Math.floor(n/10)] + (n%10 ? ' ' + en1to19[n%10] : '');
+  return en1to19[Math.floor(n/100)] + ' Hundred' + (n%100 ? ' ' + enHundreds(n%100) : '');
+}
+
+function numberToEnglish(amount) {
+  if (amount === 0) return 'Zero Rupees Only';
+
+  const rupees = Math.floor(amount);
+  const paisa  = Math.round((amount - rupees) * 100);
+
+  let words = '';
+  let rem = rupees;
+
+  const crore = Math.floor(rem / 10000000); rem %= 10000000;
+  const lakh  = Math.floor(rem / 100000);   rem %= 100000;
+  const thou  = Math.floor(rem / 1000);     rem %= 1000;
+  const hund  = rem;
+
+  if (crore > 0) words += enHundreds(crore) + ' Crore';
+  if (lakh  > 0) words += (words ? ' ' : '') + enHundreds(lakh)  + ' Lakh';
+  if (thou  > 0) words += (words ? ' ' : '') + enHundreds(thou)  + ' Thousand';
+  if (hund  > 0) words += (words ? ' ' : '') + enHundreds(hund);
+
+  let result = words ? words + ' Rupees' : '';
+
+  if (paisa > 0) {
+    result += ' and ' + enHundreds(paisa) + ' Paise';
+  }
+
+  return (result || 'Zero Rupees') + ' Only';
+}
+
+/* ────────────────────────────────
+   UI Logic
+──────────────────────────────── */
+/* Indian number format: 1,50,00,000 */
+function toIndianFormat(num) {
+  const [intPart, decPart] = num.toFixed(2).split('.');
+  const lastThree = intPart.slice(-3);
+  const rest = intPart.slice(0, -3);
+  const formatted = rest ? rest.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + ',' + lastThree : lastThree;
+  return '₹' + formatted + (decPart !== '00' ? '.' + decPart : '');
+}
+
+const input   = document.getElementById('amountInput');
+const resMr   = document.getElementById('resultMr');
+const resEn   = document.getElementById('resultEn');
+const errMsg  = document.getElementById('errorMsg');
+const formattedAmt    = document.getElementById('formattedAmt');
+const formattedAmtVal = document.getElementById('formattedAmtVal');
+
+let mrText = '', enText = '';
+
+function setEmpty() {
+  resMr.innerHTML = '<span class="empty">इथे मराठीत रक्कम दिसेल…</span>';
+  resEn.innerHTML = '<span class="empty">Amount in English will appear here…</span>';
+  mrText = ''; enText = '';
+  formattedAmt.style.display = 'none';
+}
+
+function convert() {
+  const raw = input.value.trim();
+  errMsg.classList.remove('visible');
+
+  if (raw === '' || raw === null) { setEmpty(); return; }
+
+  const val = parseFloat(raw);
+
+  if (isNaN(val) || val < 0) {
+    setEmpty();
+    errMsg.classList.add('visible');
+    return;
+  }
+
+  if (val > 9999999999.99) {
+    setEmpty();
+    errMsg.classList.add('visible');
+    return;
+  }
+
+  mrText = numberToMarathi(val);
+  enText = numberToEnglish(val);
+
+  resMr.textContent = mrText;
+  resEn.textContent = enText;
+  resMr.classList.remove('empty');
+  resEn.classList.remove('empty');
+
+  formattedAmtVal.textContent = toIndianFormat(val);
+  formattedAmt.style.display = 'block';
+}
+
+function clearInput() {
+  input.value = '';
+  setEmpty();
+  errMsg.classList.remove('visible');
+  input.focus();
+}
+
+function copyText(lang) {
+  const text = lang === 'mr' ? mrText : enText;
+  if (!text) return;
+  const btnId = lang === 'mr' ? 'copyMr' : 'copyEn';
+  const btn = document.getElementById(btnId);
+
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(() => showCopied(btn, lang));
+  } else {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showCopied(btn, lang);
+  }
+}
+
+function showCopied(btn, lang) {
+  const orig = btn.innerHTML;
+  btn.innerHTML = '✓ ' + (lang === 'mr' ? 'कॉपी झाले!' : 'Copied!');
+  btn.classList.add('copied');
+  setTimeout(() => {
+    btn.innerHTML = orig;
+    btn.classList.remove('copied');
+  }, 1800);
+}
+
+input.addEventListener('input', convert);
+input.addEventListener('keydown', e => { if(e.key === 'Enter') convert(); });
+</script>
+</body>
+</html>
